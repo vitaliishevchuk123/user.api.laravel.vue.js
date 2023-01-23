@@ -2,31 +2,32 @@
     <div class="album py-4 bg-light">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                <div class="col">
+                <div class="col" v-for="user in users">
                     <div class="card shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                             preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"></rect>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
+                        <div class="card-header py-3 text-white bg-secondary border-secondary">
+                            <h5 class="my-0 fw-normal">{{ user.name }}</h5>
+                        </div>
+                        <div class="d-flex justify-content-center mt-4 w-100">
+                            <img :src="user.image" alt="user image">
+                        </div>
 
                         <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-                            </div>
+                            <ul class="nav nav-pills flex-column mb-2">
+                                <li class="nav-item">
+                                    <i class="fa-solid fa-phone"></i> {{ user.phone }}
+                                </li>
+                                <li class="nav-item">
+                                    <i class="fa-solid fa-envelope"></i> {{ user.email }}
+                                </li>
+                                <li class="nav-item"><b>Position</b>: {{ user.position }}</li>
+                                <li class="nav-item"><b>Registered</b>: {{ user.created_at }}</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="d-flex justify-content-center p-4">
-                <button class="btn btn-lg btn-dark">Load more</button>
+                <button class="btn btn-lg btn-dark" @click="loadUsers">Load more</button>
             </div>
 
         </div>
@@ -37,16 +38,41 @@
 export default {
     data() {
         return {
-            count: 0
+            users: [],
+            params: {
+                categoryId: '',
+                perPage: 5,
+                sortField: 'created_at',
+                sortDirection: 'desc',
+            },
+            page: 1,
+            search: '',
+            loading: true,
+            errored: false,
         }
     },
     methods: {
-        increment() {
-            this.count++
-        }
+        loadUsers: async function () {
+            try {
+                let response = await axios.get('/api/v1/users/?page=' + this.page, {
+                    params: {
+                        search: this.search.length >= 2 ? this.search : '',
+                        ...this.params,
+                    },
+                });
+                response.data.data.forEach((item) => {
+                    this.users.push(item);
+                })
+                this.page++;
+                this.loading = false;
+            } catch (error) {
+                console.log(error);
+                this.errored = true;
+            }
+        },
     },
-    mounted() {
-        console.log(`The initial count is ${this.count}.`)
+    async mounted() {
+        await this.loadUsers();
     }
 }
 </script>

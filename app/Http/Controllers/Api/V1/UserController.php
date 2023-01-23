@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
-        return UserResource::collection(User::paginate(6));
+        return UserResource::collection(User::query()->paginate(6, ['*'], 'page', request('page')));
     }
 
     public function store(UserRequest $request): object
