@@ -3,9 +3,9 @@
 namespace App\Models;
 
 
-use Illuminate\Database\Eloquent\Model;
+use App\Templates\TemplateModels\TemplateImageModel;
 
-class UserImage extends Model
+class UserImage extends TemplateImageModel
 {
 
     protected $fillable = [

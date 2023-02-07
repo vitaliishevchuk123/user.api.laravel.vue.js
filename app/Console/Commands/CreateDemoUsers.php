@@ -41,55 +41,48 @@ class CreateDemoUsers extends Command
         }
         $bar = $this->output->createProgressBar($count);
 
-        $manNames = ['Vasyl', 'Andrey', 'Vladimir', 'Petro', 'Fedir', 'Maxim', 'Vitalii',
-            'Oleg', 'Valerii', 'Sergiy', 'Ivan', 'Alexander', 'Anatoliy'];
-        $manSurnames = ['Poroshenko', 'Shevchuk', 'Polishchuk', 'Voytyuk', 'Hare', 'Vovk',
-            'Rudnik', 'Likhvan', 'Nishchyt', 'Kovalchuk', 'Dmytruk', 'Mushroom', 'Piven', 'Zelenskyi'];
-        $womanNames = ['Lisa', 'Olga', 'Maria', 'Ruslana', 'Olga', 'Anna', 'Viktoria'];
-        $womanSurnames = ['Poroshenko', 'Osooka', 'Polova', 'Snake', 'Hare', 'Fox',
-            'Mouse', 'Harna', 'Nischyt', 'Kovalchuk', 'Lisova', 'Damoy', 'Rooster', 'Zelenska'];
+        $manNames = ['Liam', 'Noah', 'Oliver', 'Elijah', 'James', 'William', 'Benjamin', 'Lucas', 'Henry', 'Theodore', 'Jack', 'Levi', 'Alexander', 'Jackson', 'Mateo'];
+        $womanNames = ['Olivia', 'Emma', 'Charlotte', 'Amelia', 'Ava', 'Sophia', 'Isabella', 'Mia', 'Evelyn', 'Harper'];
+        $allSurnames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin'];
 
-        $logins = ['rambo', 'otaman', 'soso', 'batman', 'animal', 'potato',
-            'champion', 'fighter', 'rabbit', 'salo', 'captain', 'hulk', 'thanos'];
         $domens = ['@gmail.com', '@ukr.ner'];
-
-        for ($i = 1; $i <= $count; $i++) {
-            $sex = rand(0, 2);
+        $ids = range(1,45);
+        shuffle($ids);
+        foreach ($ids as $k => $i) {
+            if ($i >= 1 && $i <= 26) {
+                $sex = 1;
+            } else {
+                $sex = 2;
+            }
+            $surname = $allSurnames[array_rand($allSurnames)];
             if ($sex == 1) {
                 $name = $manNames[array_rand($manNames)];
-                $surnames = $manSurnames[array_rand($manSurnames)];
             }
-            if ($sex == 0) {
-                $sex = null;
-                $name = $this->sexStatus ? $womanNames[array_rand($womanNames)] : $manNames[array_rand($womanNames)];
-                $surnames = $this->sexStatus ? $womanSurnames[array_rand($womanSurnames)] : $manSurnames[array_rand($womanSurnames)];
-                $this->sexStatus = !$this->sexStatus;
-            }
-
             if ($sex == 2) {
                 $name = $womanNames[array_rand($womanNames)];
-                $surnames = $womanSurnames[array_rand($womanSurnames)];
             }
             $this->endNum = 0;
             $createdData = rand(5, 30);
             $updatedData = rand(1, 5);
-            $login = $this->generateLogin($logins[array_rand($logins)]);
             $phone = $this->generatePhone();
+            $login = $this->generateLogin($name);
 
             /** @var User $user */
             $user = User::query()->firstOrCreate([
+                'id' => $k + 1,
                 'name' => $name,
-                'surname' => $surnames,
+                'surname' => $surname,
                 'position_id' => rand(1, 4),
                 'login' => $login,
-                'email' => $login . $domens[array_rand($domens)],
+                'email' => strtolower($login). '-' . strtolower($surname) . $domens[array_rand($domens)],
                 'phone' => $phone,
                 'password' => Hash::make('12345678'),
                 'sex' => $sex,
                 'created_at' => now()->subWeeks($createdData)->toDateTimeString(),
                 'updated_at' => now()->subWeeks($updatedData)->toDateTimeString(),
             ]);
-            $user->image()->firstOrCreate(['file_name' => "white-{$i}.jpeg"]);
+            $image = $sex === 1 ? "man-{$i}.jpeg" : "woman-{$i}.jpeg";
+            $user->image()->firstOrCreate(['file_name' => $image]);
             $bar->advance();
         }
         $bar->finish();

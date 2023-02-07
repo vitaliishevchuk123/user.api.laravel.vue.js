@@ -1,6 +1,7 @@
-<h1 align="center" style="color:cornflowerblue;">User Api</h1>
-<p align="center"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="200"></p>
+### v0.0.1 ###
+* [hotfix] list of users with load more button
 
+<h1 align="center" style="color:#a52834;">User Api (Laravel + Vue.js)</h1>
 ## About the project
 
 - __Implemented simple REST API server (1 POST and 2 GET requests)__

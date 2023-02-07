@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\GetTokenController;
 use App\Http\Controllers\Api\TokenController;
+use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +19,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::get('/token', [TokenController::class, 'createToken']);
     Route::post('/register', [AuthController::class, 'register']);
+    Route::apiResources(
+    [
+        'users' => UserController::class,
+    ]
+);
 });
 
 

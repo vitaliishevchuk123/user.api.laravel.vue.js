@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -42,7 +43,12 @@ class User extends Authenticatable
 
     public function image(): HasOne
     {
-        return $this->hasOne(UserImage::class);
+        return $this->hasOne(UserImage::class)->withDefault();
+    }
+
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(Position::class)->withDefault();
     }
 
     public function getFullNameAttribute(): string
