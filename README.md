@@ -2,6 +2,7 @@
 * [hotfix] list of users with load more button
 
 <h1 align="center" style="color:#a52834;">User Api (Laravel + Vue.js)</h1>
+
 ## About the project
 
 - __Implemented simple REST API server (1 POST and 2 GET requests)__
