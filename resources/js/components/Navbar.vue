@@ -12,7 +12,7 @@
                         <RouterLink class="nav-link active" to="/">Home</RouterLink>
                     </li>
                     <li class="nav-item">
-                        <RouterLink class="nav-link" to="/create-user">Create user</RouterLink>
+                        <RouterLink class="nav-link" to="/create-user">Join the team</RouterLink>
                     </li>
                 </ul>
                 <div class="d-flex">

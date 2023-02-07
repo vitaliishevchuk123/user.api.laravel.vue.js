@@ -1,5 +1,15 @@
 <template>
-    <div class="album py-4 bg-light">
+    <section class="py-2 mt-2 text-center container">
+        <div class="row py-lg-2">
+          <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Dream company</h1>
+            <p class="lead text-muted">
+                Register and join the dream team. After registration, your profile will be placed at the top of the list.
+            </p>
+          </div>
+        </div>
+      </section>
+    <div class="album bg-light">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col" v-for="user in users">
@@ -26,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-center p-4">
+            <div v-if="showLoadMore" class="d-flex justify-content-center p-4">
                 <button class="btn btn-lg btn-dark" @click="loadUsers">Load more</button>
             </div>
 
@@ -49,6 +59,7 @@ export default {
             search: '',
             loading: true,
             errored: false,
+            showLoadMore: false,
         }
     },
     methods: {
@@ -60,6 +71,7 @@ export default {
                         ...this.params,
                     },
                 });
+                this.showLoadMore = response.data.meta.current_page !== response.data.meta.last_page;
                 response.data.data.forEach((item) => {
                     this.users.push(item);
                 })
