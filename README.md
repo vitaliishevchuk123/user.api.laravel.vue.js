@@ -1,3 +1,6 @@
+### v0.0.1 ###
+* [hotfix] list of users with load more button
+
 <h1 align="center" style="color:#a52834;">User Api (Laravel + Vue.js)</h1>
 ## About the project
 
